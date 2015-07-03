@@ -1,0 +1,37 @@
+{
+  "name": "lonesomedom",
+  "version": "1.0.0",
+  "description": "Standalone dom generator",
+  "main": "lonesomedom.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ivsgroup/lonesomedom.git"
+  },
+  "keywords": [
+    "standalone",
+    "offline",
+    "ucss",
+    "uncss",
+    "microcss",
+    "portable",
+    "dom"
+  ],
+  "author": "Francois Leurent <fleurent@ivsweb.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ivsgroup/lonesomedom/issues"
+  },
+  "homepage": "https://github.com/ivsgroup/lonesomedom",
+  "dependencies": {
+    "microcss": "^1.0.0",
+    "uclass": "^1.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.8.0",
+    "grunt-contrib-uglify": "^0.9.1"
+  }
+}
