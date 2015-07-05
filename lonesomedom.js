@@ -2,17 +2,6 @@ var Class = require('uclass');
 var ucss  = require('microcss');
 
 
-var $n = function(type, attrs){
-  var out = document.createElement(type);
-  for(var k in attrs)
-      out[k] = attrs[k];
-  out.inject = function(parent, top){
-    parent.insertBefore(out, top ? parent.firstChild : null);
-    return out;
-  }
-  return out;
-}
-
 module.exports = function(anchor){
   return (new LonesomeDom(anchor)).process();
 }
@@ -21,15 +10,31 @@ var LonesomeDom = new Class({
   anchor     : null,
 
   initialize : function(anchor){
-    this.anchor = anchor;
+    this.anchor   = anchor;
+    this.document = anchor.ownerDocument;
+  },
+
+  $n : function(type, attrs){
+    var out = this.document.createElement(type);
+    for(var k in attrs) {
+        if(k in out)
+          out[k] = attrs[k];
+        else
+          out.setAttribute(k, attrs[k]);
+    }
+    out.inject = function(parent, top){
+      parent.insertBefore(out, top ? parent.firstChild : null);
+      return out;
+    }
+    return out;
   },
 
   inlineimg : function(anchor, lastfoo){
-    var imgs = anchor.querySelectorAll("img");
+    var self = this, imgs = anchor.querySelectorAll("img");
 
     var urls = {};
     Array.each(imgs, function(img){
-      var oCanvas = $n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
+      var oCanvas = self.$n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
       oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight );
       urls[img.src] = oCanvas.toDataURL();
     });
@@ -45,8 +50,8 @@ var LonesomeDom = new Class({
     var output = null, container = this.anchor, lastfoo =  null, self = this;
     var allcss = ucss(this.anchor);
 
-    while(container != document){ 
-      var foo = $n(container.nodeName, {'class': container.className, 'style' : container.style});
+    while(container != this.document){ 
+      var foo = self.$n(container.nodeName, { className: container.className, 'style' : container.style});
       if(container.id) foo.id = container.id;
       if(container == this.anchor)
         foo.innerHTML = this.anchor.innerHTML;
@@ -58,9 +63,9 @@ var LonesomeDom = new Class({
       lastfoo = foo;
     }
 
-    var head = $n('head').inject(lastfoo, 'top');
-    $n('meta', {'http-equiv': "Content-Type", content: 'text/html', charset: 'utf-8'}).inject(head);
-    $n('style', {type: "text/css", innerText: allcss }).inject(head);
+    var head = self.$n('head').inject(lastfoo, 'top');
+    self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
+    self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
 
 
     self.inlineimg(this.anchor, lastfoo);
