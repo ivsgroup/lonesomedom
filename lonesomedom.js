@@ -24,8 +24,25 @@ var LonesomeDom = new Class({
     this.anchor = anchor;
   },
 
+  inlineimg : function(anchor, lastfoo){
+    var imgs = anchor.querySelectorAll("img");
+
+    var urls = {};
+    Array.each(imgs, function(img){
+      var oCanvas = $n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
+      oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight );
+      urls[img.src] = oCanvas.toDataURL();
+    });
+
+    imgs = lastfoo.querySelectorAll("img");
+    Array.each(imgs, function(img){
+      img.src= urls[img.src];
+    });
+
+  },
+
   process : function (){
-    var output = null, container = this.anchor, lastfoo =  null;
+    var output = null, container = this.anchor, lastfoo =  null, self = this;
     var allcss = ucss(this.anchor);
 
     while(container != document){ 
@@ -45,6 +62,8 @@ var LonesomeDom = new Class({
     $n('meta', {'http-equiv': "Content-Type", content: 'text/html', charset: 'utf-8'}).inject(head);
     $n('style', {type: "text/css", innerText: allcss }).inject(head);
 
+
+    self.inlineimg(this.anchor, lastfoo);
     return lastfoo;
   }
 });
