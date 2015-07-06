@@ -67,7 +67,7 @@ var LonesomeDom = new Class({
     self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
 
     self.inlineimg(this.anchor, lastfoo);
-    var allcss = ucss(this.anchor, {inlineFonts : false}, function(err, allcss) {
+    var allcss = ucss(this.anchor, {inlineFonts : false, fontsDir : 'fonts' }, function(err, allcss) {
       self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
       chain(null, lastfoo);
     });
