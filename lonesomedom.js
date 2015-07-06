@@ -1,9 +1,9 @@
 var Class = require('uclass');
 var ucss  = require('microcss');
+var forEach = require('mout/array/foreach');
 
-
-module.exports = function(anchor){
-  return (new LonesomeDom(anchor)).process();
+module.exports = function(anchor, chain){
+  (new LonesomeDom(anchor)).process(chain);
 }
 
 var LonesomeDom = new Class({
@@ -33,22 +33,22 @@ var LonesomeDom = new Class({
     var self = this, imgs = anchor.querySelectorAll("img");
 
     var urls = {};
-    Array.each(imgs, function(img){
+    forEach(imgs, function(img){
       var oCanvas = self.$n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
       oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight );
       urls[img.src] = oCanvas.toDataURL();
     });
 
     imgs = lastfoo.querySelectorAll("img");
-    Array.each(imgs, function(img){
+    forEach(imgs, function(img){
       img.src= urls[img.src];
     });
 
   },
 
-  process : function (){
+  process : function (chain){
     var output = null, container = this.anchor, lastfoo =  null, self = this;
-    var allcss = ucss(this.anchor);
+
 
     while(container != this.document){ 
       var foo = self.$n(container.nodeName, { className: container.className, 'style' : container.style});
@@ -65,11 +65,13 @@ var LonesomeDom = new Class({
 
     var head = self.$n('head').inject(lastfoo, 'top');
     self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
-    self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
-
 
     self.inlineimg(this.anchor, lastfoo);
-    return lastfoo;
+    var allcss = ucss(this.anchor, {inlineFonts : false}, function(err, allcss) {
+      self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
+      chain(null, lastfoo);
+    });
+    
   }
 });
 

@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/ivsgroup/lonesomedom",
   "dependencies": {
-    "microcss": "^1.0.0",
+    "microcss": "^1.1.0",
+    "mout": "^0.11.0",
     "uclass": "^1.0.1"
   },
   "devDependencies": {

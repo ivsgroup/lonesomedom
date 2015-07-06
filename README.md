@@ -25,6 +25,6 @@ lonesomedom.process(anchor, function(err, simpleDom) {
 
 
 # Todo 
-* Fonts embbedding
+* Expose ucss options
 * Anti-aliasing in image inlining
 * Strip inline js/scripts (?)

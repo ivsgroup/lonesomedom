@@ -18,11 +18,7 @@ module.exports = function(grunt) {
   grunt.config('browserify', {
     options : { browserifyOptions : {
       //  https://github.com/substack/node-browserify/blob/master/bin/args.js#L71
-      browserField  : false,
-      builtins      : false,
-      commondir     : false,
       detectGlobals : false,
-      exclude       : ['buffer'],
     },},
 
     pack : {
