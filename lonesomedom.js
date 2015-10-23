@@ -1,6 +1,6 @@
 var Class = require('uclass');
 var ucss  = require('microcss');
-var forEach = require('mout/array/foreach');
+var forEach = require('mout/array/forEach');
 
 module.exports = function(anchor, chain){
   (new LonesomeDom(anchor)).process(chain);

@@ -1,6 +1,6 @@
 {
   "name": "lonesomedom",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Standalone dom generator",
   "main": "lonesomedom.js",
   "scripts": {
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/ivsgroup/lonesomedom",
   "dependencies": {
-    "microcss": "^1.1.0",
+    "microcss": "^1.1.1",
     "mout": "^0.11.0",
     "uclass": "^1.0.1"
   },
