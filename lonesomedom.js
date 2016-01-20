@@ -1,16 +1,30 @@
-var Class = require('uclass');
-var ucss  = require('microcss');
+var Class   = require('uclass');
+var ucss    = require('microcss');
 var forEach = require('mout/array/forEach');
 
-module.exports = function(anchor, chain){
-  (new LonesomeDom(anchor)).process(chain);
+module.exports = function(anchor, options, chain){
+  (new LonesomeDom(anchor, options)).process(chain);
 }
 
 var LonesomeDom = new Class({
+  Implements : [
+    require('uclass/options'),
+  ],
+
   anchor     : null,
 
-  initialize : function(anchor){
+  // same options as ucss
+  options : {
+    inlineimages  : false,
+    inlineFonts   : false,
+    fontsDir      : '/fonts/',
+    imagesBaseDir : '/resources',
+    AbsolutePath  : false
+  },
+
+  initialize : function(anchor, options){
     this.anchor   = anchor;
+    this.setOptions(options);
     this.document = anchor.ownerDocument;
   },
 
@@ -34,14 +48,18 @@ var LonesomeDom = new Class({
 
     var urls = {};
     forEach(imgs, function(img){
-      var oCanvas = self.$n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
-      oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight );
-      urls[img.src] = oCanvas.toDataURL();
+      if (self.options.inlineimages) {
+        var oCanvas = self.$n('canvas', {width : img.offsetWidth, height: img.offsetHeight }), oCtx = oCanvas.getContext("2d");
+        oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight );
+        urls[img.src] = oCanvas.toDataURL();
+      } else if (self.options.AbsolutePath) {
+        urls[img.src] = String(img.src);
+      }
     });
 
     imgs = lastfoo.querySelectorAll("img");
-    forEach(imgs, function(img){
-      img.src= urls[img.src];
+    forEach(imgs, function(img) {
+      img.src = urls[img.src] || img.src;
     });
 
   },
@@ -67,7 +85,8 @@ var LonesomeDom = new Class({
     self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
 
     self.inlineimg(this.anchor, lastfoo);
-    var allcss = ucss(this.anchor, {inlineFonts : false, fontsDir : 'fonts' }, function(err, allcss) {
+
+    var allcss = ucss(this.anchor, this.options, function(err, allcss) {
       self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
       chain(null, lastfoo);
     });
