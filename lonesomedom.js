@@ -68,7 +68,7 @@ var LonesomeDom = new Class({
     var output = null, container = this.anchor, lastfoo =  null, self = this;
 
 
-    while(container != this.document){ 
+    while(container != this.document && container != null){
       var foo = self.$n(container.nodeName, { className: container.className, 'style' : container.style});
       if(container.id) foo.id = container.id;
       if(container == this.anchor)
