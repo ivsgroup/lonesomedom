@@ -17,7 +17,7 @@ var LonesomeDom = new Class({
   options : {
     inlineimages  : false,
     inlineFonts   : false,
-    fontsDir      : '/fonts/',
+    fontsDir      : '/fonts',
     imagesBaseDir : '/resources',
     AbsolutePath  : false
   },
