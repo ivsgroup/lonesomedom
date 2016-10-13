@@ -1,14 +1,15 @@
-var Class   = require('uclass');
-var ucss    = require('microcss');
-var forEach = require('mout/array/forEach');
+const Class   = require('uclass');
+const ucss    = require('microcss');
+const forEach = require('mout/array/forEach');
 
-module.exports = function(anchor, options, chain){
+module.exports = function(anchor, options, chain) {
   (new LonesomeDom(anchor, options)).process(chain);
 }
 
-var LonesomeDom = new Class({
+const LonesomeDom = new Class({
+
   Implements : [
-    require('uclass/options'),
+    require('uclass/options')
   ],
 
   anchor     : null,
@@ -22,13 +23,13 @@ var LonesomeDom = new Class({
     AbsolutePath  : false
   },
 
-  initialize : function(anchor, options){
+  initialize : function(anchor, options) {
     this.anchor   = anchor;
     this.setOptions(options);
     this.document = anchor.ownerDocument;
   },
 
-  $n : function(type, attrs){
+  $n : function(type, attrs) {
     var out = this.document.createElement(type);
     for(var k in attrs) {
         if(k in out)
@@ -43,7 +44,7 @@ var LonesomeDom = new Class({
     return out;
   },
 
-  inlineimg : function(anchor, lastfoo){
+  inlineimg : function(anchor, lastfoo) {
     var self = this, imgs = anchor.querySelectorAll("img");
 
     var urls = {};
@@ -64,7 +65,7 @@ var LonesomeDom = new Class({
 
   },
 
-  process : function (chain){
+  process : function (chain) {
     var output = null, container = this.anchor, lastfoo =  null, self = this;
 
 
@@ -93,4 +94,3 @@ var LonesomeDom = new Class({
     
   }
 });
-
