@@ -1,3 +1,5 @@
+[![NPM version](https://img.shields.io/npm/v/lonesomedom.svg)](https://www.npmjs.com/package/lonesomedom)
+
 # Lonesome dom
 
 Generate a standalone, portable, offline capable version of any DOM.
