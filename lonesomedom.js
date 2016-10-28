@@ -32,10 +32,20 @@ const LonesomeDom = new Class({
   $n : function(type, attrs) {
     var out = this.document.createElement(type);
     for(var k in attrs) {
-        if(k in out)
+      if(k in out && attrs[k]) {
+        if (k == 'style') {
+          for (var l in attrs[k]) {
+            if (attrs[k][l] && typeof attrs[k][l] != 'function') {
+              console.log(l, attrs[k][l]);
+              out[k][l] = attrs[k][l];
+            }
+          }
+        } else {
           out[k] = attrs[k];
-        else
-          out.setAttribute(k, attrs[k]);
+        }
+      } else{
+        out.setAttribute(k, attrs[k]);
+      }
     }
     out.inject = function(parent, top){
       parent.insertBefore(out, top ? parent.firstChild : null);
@@ -68,15 +78,15 @@ const LonesomeDom = new Class({
   process : function (chain) {
     var output = null, container = this.anchor, lastfoo =  null, self = this;
 
-
-    while(container != this.document && container != null){
+    while(container != this.document && container != null) {
       var foo = self.$n(container.nodeName, { className: container.className, 'style' : container.style});
       if(container.id) foo.id = container.id;
-      if(container == this.anchor)
+      if(container == this.anchor) {
         foo.innerHTML = this.anchor.innerHTML;
-      else {
+      } else {
         lastfoo.inject(foo);
       }
+
       container = container.parentNode;
 
       lastfoo = foo;
@@ -86,7 +96,6 @@ const LonesomeDom = new Class({
     self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
 
     self.inlineimg(this.anchor, lastfoo);
-
     var allcss = ucss(this.anchor, this.options, function(err, allcss) {
       self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
       chain(null, lastfoo);
