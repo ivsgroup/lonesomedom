@@ -36,7 +36,6 @@ const LonesomeDom = new Class({
         if (k == 'style') {
           for (var l in attrs[k]) {
             if (attrs[k][l] && typeof attrs[k][l] != 'function') {
-              console.log(l, attrs[k][l]);
               out[k][l] = attrs[k][l];
             }
           }
