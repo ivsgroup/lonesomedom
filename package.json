@@ -1,6 +1,6 @@
 {
   "name": "lonesomedom",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Standalone dom generator",
   "main": "lonesomedom.js",
   "scripts": {
