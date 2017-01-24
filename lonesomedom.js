@@ -1,6 +1,7 @@
 const Class   = require('uclass');
 const ucss    = require('microcss');
 const forEach = require('mout/array/forEach');
+const path    = require('path');
 
 module.exports = function(anchor, options, chain) {
   (new LonesomeDom(anchor, options)).process(chain);
@@ -95,10 +96,33 @@ const LonesomeDom = new Class({
     self.$n('meta', {'http-equiv': "content-type", content: 'text/html', charset: 'utf-8'}).inject(head);
 
     self.inlineimg(this.anchor, lastfoo);
+    if (this.options.AbsolutePath)
+      self.inlineCssImages(lastfoo);
+
     var allcss = ucss(this.anchor, this.options, function(err, allcss) {
       self.$n('style', {type: "text/css", innerText: allcss }).inject(head);
       chain(null, lastfoo);
     });
     
+  },
+
+  inlineCssImages : function(lastfoo) {
+    var all = lastfoo.getElementsByTagName("*");
+    var remoteMatch = new RegExp("url\\((.*)\\)");
+
+    for (var i = 0; i < all.length; i++) {
+      var rules = all[i].style;
+      //console.log(rules);
+      for (var j in rules) {
+        if (j == 'cssText') continue;
+        if (rules[j] && typeof rules[j] != 'function' && remoteMatch.test(rules[j])) {
+          var imageUrl    = remoteMatch.exec(rules[j])[1].replace(new RegExp('"', 'g'), '');
+          var absoluteUrl = path.join(this.options.AbsolutePath, imageUrl);
+          all[i].style[j] = "url('" + absoluteUrl + "')";
+        }
+      }
+    }
+
   }
+
 });
