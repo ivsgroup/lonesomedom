@@ -16,8 +16,6 @@ Use with browserify for a client side usage
 # API
 ```
   var lonesomedom = require('lonesomedom');
- OR
-  <script src='lonesomedom/pack.min.js'/>
 
 lonesomedom.process(anchor, function(err, simpleDom) {
   console.log(simpleDom.outerHTML);

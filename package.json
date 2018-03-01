@@ -2,9 +2,11 @@
   "name": "lonesomedom",
   "version": "1.2.5",
   "description": "Standalone dom generator",
-  "main": "lonesomedom.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "jscs": "jscs --config=node_modules/ivs-jssc/ivs-node.jscsrc index.js",
+    "eslint": "eslint --config=node_modules/ivs-jssc/ivs-browser.eslintrc.js index.js",
+    "checkall": "npm run jscs && npm run eslint"
   },
   "repository": {
     "type": "git",
@@ -27,13 +29,9 @@
   "homepage": "https://github.com/ivsgroup/lonesomedom",
   "dependencies": {
     "microcss": "^1.3.3",
-    "mout": "^1.0.0",
-    "uclass": "^2.1.0"
+    "mout": "^1.0.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.8.0",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-contrib-watch": "^0.6.1"
+    "ivs-jssc": "^2.1.3"
   }
 }
