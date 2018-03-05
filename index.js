@@ -27,18 +27,15 @@ class LonesomeDom {
     var out = this.document.createElement(type);
     for(var k in attrs) {
       if(k in out && attrs[k]) {
-        if (k == 'style') {
-          for (var l in attrs[k]) {
-            if (attrs[k][l] && typeof attrs[k][l] != 'function') {
+        if(k == 'style') {
+          for(var l in attrs[k]) {
+            if(attrs[k][l] && typeof attrs[k][l] != 'function')
               out[k][l] = attrs[k][l];
-            }
           }
-        } else {
+        } else
           out[k] = attrs[k];
-        }
-      } else {
+      } else
         out.setAttribute(k, attrs[k]);
-      }
     }
     out.inject = function(parent, top) {
       parent.insertBefore(out, top ? parent.firstChild : null);
@@ -53,15 +50,14 @@ class LonesomeDom {
     var urls = {};
 
     forEach(imgs, (img) => {
-      if (this.options.inlineimages) {
+      if(this.options.inlineimages) {
         var oCanvas = this.$n('canvas', {width : img.offsetWidth, height : img.offsetHeight});
         var oCtx    = oCanvas.getContext("2d");
 
         oCtx.drawImage(img, 0, 0, img.offsetWidth, img.offsetHeight);
         urls[img.src] = oCanvas.toDataURL();
-      } else if (this.options.AbsolutePath) {
+      } else if(this.options.AbsolutePath)
         urls[img.src] = String(img.src);
-      }
     });
 
     imgs = lastfoo.querySelectorAll("img");
@@ -76,12 +72,12 @@ class LonesomeDom {
 
     while(container != this.document && container != null) {
       var foo = this.$n(container.nodeName, {className : container.className, style : container.style});
-      if(container.id) foo.id = container.id;
-      if(container == this.anchor) {
+      if(container.id)
+        foo.id = container.id;
+      if(container == this.anchor)
         foo.innerHTML = this.anchor.innerHTML;
-      } else {
+      else
         lastfoo.inject(foo);
-      }
 
       container = container.parentNode;
       lastfoo = foo;
@@ -91,7 +87,7 @@ class LonesomeDom {
     this.$n('meta', {'http-equiv' : "content-type", content : 'text/html', charset : 'utf-8'}).inject(head);
 
     this.inlineimg(this.anchor, lastfoo);
-    if (this.options.AbsolutePath)
+    if(this.options.AbsolutePath)
       this.inlineCssImages(lastfoo);
 
     ucss(this.anchor, this.options, (err, allcss) => {
@@ -104,12 +100,12 @@ class LonesomeDom {
     var all         = lastfoo.getElementsByTagName("*");
     var remoteMatch = new RegExp("url\\((.*)\\)");
 
-    for (var i = 0; i < all.length; i++) {
+    for(var i = 0; i < all.length; i++) {
       var rules = all[i].style;
       //console.log(rules);
-      for (var j in rules) {
-        if (j == 'cssText') continue;
-        if (rules[j] && typeof rules[j] != 'function' && remoteMatch.test(rules[j])) {
+      for(var j in rules) {
+        if(j == 'cssText') continue;
+        if(rules[j] && typeof rules[j] != 'function' && remoteMatch.test(rules[j])) {
           var imageUrl    = remoteMatch.exec(rules[j])[1].replace(new RegExp('"', 'g'), '');
           var absoluteUrl = path.join(this.options.AbsolutePath, imageUrl);
           all[i].style[j] = "url('" + absoluteUrl + "')";
